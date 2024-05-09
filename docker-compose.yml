@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  frontend:
+    image: umsfrontend
+    build: ./umsfront
+    container_name: umsfrontend-container
+    ports:
+      - "81:80"
+    depends_on:
+      - backend
+
+  backend:
+    image: umsbackend
+    build: ./umsdemo
+    container_name: umsbackend-container
+    ports:
+      - "8001:8000"
+    environment:
+      - DB_NAME=ums
+      - DB_USER=postgres
+      - DB_PASSWORD=thorabh
+      - DB_PORT=5432
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    container_name: umsdb
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=ums
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=thorabh
+
+networks:
+  mynetwork:
+    driver: bridge
